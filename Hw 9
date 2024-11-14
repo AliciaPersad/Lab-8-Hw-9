@@ -1,0 +1,55 @@
+Alicia Persad, Abdullah Al Aman, Flamur Kukaj, Marvin Harricharran
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+install.packages("haven")
+library(readr)
+install.packages("readr")
+library(haven)
+
+
+getwd()
+load("/Users/princessalicia3/Desktop/B2000/acs2021_recoded.RData")
+
+
+ols_out1 <- lm(he_more_than_5yrs_than_her ~ educ_hs + educ_somecoll + educ_college + educ_advdeg + AGE, data = trad_data)
+
+#  OLS Model
+pred_vals_ols1 <- predict(ols_out1, trad_data)
+
+# Classify predictions 
+pred_model_ols1 <- as.integer(pred_vals_ols1 > mean(pred_vals_ols1))
+
+
+table(pred = pred_model_ols1, true = trad_data$he_more_than_5yrs_than_her)
+
+
+# Logit Model
+model_logit1 <- glm(he_more_than_5yrs_than_her ~ educ_hs + educ_somecoll + educ_college + educ_advdeg + AGE,
+                    data = trad_data, family = binomial)
+
+
+summary(model_logit1)
+
+# Predict 
+pred_vals_logit <- predict(model_logit1, trad_data, type = "response")
+
+# Classify predictions 
+pred_model_logit1 <- as.integer(pred_vals_logit > mean(pred_vals_logit))
+
+# 
+table(pred = pred_model_logit1, true = trad_data$he_more_than_5yrs_than_her)
+
+
+Based on the results from the OLS model and Logit model , we can conclude that the Logit model was more accurate as its precision was 57.06% compared to 55.01% for the OLS model.
+
+Artices:
+
+
+Video-Games Do Not Negatively Impact Adolescent Academic Performance in Science, Mathematics or Reading
+Aaron Drummond , James D. Sauer
+	The article examines the impact of video game usage on adolescent academic performance in science, mathematics, and reading, using data from the 2009 PISA survey of over 192,000 students across 22 countries. The study employs multilevel modeling to account for the hierarchical nature of the data (students nested within schools and countries) and controls for variables like socioeconomic status, gender, and school resources. Results show that frequent gaming does not negatively affect academic outcomes, suggesting that video games may not hinder educational achievement when other factors are considered.
+
+Video Gaming as a Factor that Affects Academic Performance in Grade Nine
+Marion Terry, Ph.D. / Amjad Malik, Ph.D.
+	The article explores the relationship between recreational video gaming and academic performance, specifically focusing on grade nine students in three Canadian high schools. Academic performance was measured through attendance and final grades. Using a Likert-scale survey, the study analyzed correlations between gaming habits, school experiences, and performance, distinguishing results by gender. Pearson and Spearman correlations were employed to assess linear and non-linear relationships. Findings suggested potential negative impacts of gaming on academic outcomes, leading researchers to recommend advising parents on the risks of excessive gaming. The study highlights the need for further exploration of these associations.
